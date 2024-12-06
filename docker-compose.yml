@@ -1,0 +1,35 @@
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+
+  server1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server1
+    ports:
+      - "5001:5000"
+    restart: always
+    environment:
+      - FLASK_APP=server.py
+
+  server2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server2
+    ports:
+      - "5002:5000"
+    environment:
+      - FLASK_APP=server.py
